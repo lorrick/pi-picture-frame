@@ -3,4 +3,4 @@ A digital picture frame that uses feh and dynamically updates the slideshow base
 
 
 1) Install Raspian on a model 3 or better Pi.
-1) Install feh
+1) Install feh - sudo apt update; sudo apt -y install feh
