@@ -12,3 +12,10 @@ A digital picture frame that uses feh and dynamically updates the slideshow base
 > 
 > 0 0 1,15 * * killall feh
 > 
+
+
+
+May not be used. Need to confirm
+cat /etc/fstab
+> //192.168.1.4/PictureMount	/mnt/PictureMount/	cifs	auto,x-systemd.automount,credentials=/etc/samba/credentials/lurch	0	 0
+> 
