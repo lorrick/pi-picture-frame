@@ -76,21 +76,22 @@ https://www.justinsilver.com/random/fix-pkg-on-freenas-11-2/
 lorrick@Lurch:/volume1/bin$ cat pic-process.sh
 BASEDIR=/tmp
 
-before=`wc -l /tmp/index.txt | cut -f 1 -d " "`
+before=`wc -l /tmp/index.txt | cut -f 1 -d "/"`
 echo "This is before ${before}"
 echo "cp /tmp/index.txt /tmp/index.before"
 cp /tmp/index.txt /tmp/index.before
 
-find /volume1/Pictures/ -type f -name "*.[Jj][Pp][gG]" -exec exiv2 -u -p x pr {} 2> /dev/null \; | egrep "volume1|Xmp.dc.subject" | grep -B 1 "Frame-done" | grep -v Frame-done |grep -v -- -- > /tmp/index.txt
+find /mnt/volume1/Pictures/ -print -type f -name "*.[Jj][Pp][gG]" -exec exiv2 -u -p x pr {} 2> /dev/null \; | egrep "volume1|Xmp.dc.subject" | grep -B 1 "Frame-done" | grep -v Frame-done |grep -v -- -- > /tmp/index.txt
 
 #cat /tmp/index.txt
 cp /tmp/index.txt /tmp/index.find
 
-sed -i -e 's/^/ln -s "/g' -e 's/$/" \/volume1\/PictureMount\//g' /tmp/index.txt
+sed -i -e 's/^/ln -s "/g' /tmp/index.txt
+sed -i -e 's/$/" \/mnt\/volume1\/PictureMount\//g' /tmp/index.txt
 chmod 777 /tmp/index.txt
 /tmp/index.txt
 
-after=`wc -l /tmp/index.txt | cut -f 1 -d " "`
+after=`wc -l /tmp/index.txt | cut -f 1 -d "/"`
 echo "This is after ${after}"
 count=`expr ${after} - ${before}`
 echo "Done building PictureMount share. ${count} pictures added."
