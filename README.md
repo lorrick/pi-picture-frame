@@ -15,11 +15,6 @@ A digital picture frame that uses feh and dynamically updates the slideshow base
 
 
 
-May not be used. Need to confirm
-cat /etc/fstab
-> //192.168.1.4/PictureMount	/mnt/PictureMount/	cifs	auto,x-systemd.automount,credentials=/etc/samba/credentials/lurch	0	 0
-> 
-
 
 ```pi@piframe:/mnt $ ping lilnasx
 PING lilnasx (192.168.1.96) 56(84) bytes of data.
@@ -39,6 +34,63 @@ ff02::2		ip6-allrouters
 192.168.1.96	lilnasx
 
 ```
+
+
+pi@piframe:/mnt $ sudo mount -t cifs -o username=pi //lilnasx/PictureMount/ /mnt/PictureMount/
+Password for pi@//lilnasx/PictureMount/:  ********
+
+
+cat /etc/fstab
+> //192.168.1.4/PictureMount	/mnt/PictureMount/	cifs	auto,x-systemd.automount,credentials=/etc/samba/credentials/lurch	0	 0
+> 
+
+[   65.557798] CIFS: Attempting to mount //lilnasx/PictureMount
+[   65.603632] CIFS: Status code returned 0xc000006d STATUS_LOGON_FAILURE
+[   65.603673] CIFS: VFS: \\lilnasx Send error in SessSetup = -13
+[   65.603730] CIFS: VFS: cifs_mount failed w/return code = -13
+
+
+[  243.697158] CIFS: Attempting to mount //lilnasx/PictureMount
+
+# TrueNAS Setup
+Add mount and pi user to TrueNas
+
+$# mkdir -p /etc/samba/credentials
+$# vi lilnasx
+>
+> root@piframe:/etc/samba/credentials# cat lilnasx
+> username=pi
+> password=<password here>
+> 
+
+
+
+# TrueNAS Script
+
+```
+lorrick@Lurch:/volume1/bin$ cat pic-process.sh
+BASEDIR=/tmp
+
+before=`wc -l /tmp/index.txt | cut -f 1 -d " "`
+echo "This is before ${before}"
+echo "cp /tmp/index.txt /tmp/index.before"
+cp /tmp/index.txt /tmp/index.before
+
+find /volume1/Pictures/ -type f -name "*.[Jj][Pp][gG]" -printf %p\\n -exec exiv2 pr -u -p x {} 2> /dev/null \; | egrep "volume1|Xmp.dc.subject" | grep -B 1 "Frame-done" | grep -v Frame-done |grep -v -- -- > /tmp/index.txt
+
+#cat /tmp/index.txt
+cp /tmp/index.txt /tmp/index.find
+
+sed -i -e 's/^/ln -s "/g' -e 's/$/" \/volume1\/PictureMount\//g' /tmp/index.txt
+chmod 777 /tmp/index.txt
+/tmp/index.txt
+
+after=`wc -l /tmp/index.txt | cut -f 1 -d " "`
+echo "This is after ${after}"
+count=`expr ${after} - ${before}`
+echo "Done building PictureMount share. ${count} pictures added."
+```
+
 
 
 
