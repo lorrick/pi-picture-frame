@@ -81,7 +81,7 @@ echo "This is before ${before}"
 echo "cp /tmp/index.txt /tmp/index.before"
 cp /tmp/index.txt /tmp/index.before
 
-find /volume1/Pictures/ -type f -name "*.[Jj][Pp][gG]" -printf %p\\n -exec exiv2 pr -u -p x {} 2> /dev/null \; | egrep "volume1|Xmp.dc.subject" | grep -B 1 "Frame-done" | grep -v Frame-done |grep -v -- -- > /tmp/index.txt
+find /volume1/Pictures/ -type f -name "*.[Jj][Pp][gG]" -exec exiv2 -u -p x pr {} 2> /dev/null \; | egrep "volume1|Xmp.dc.subject" | grep -B 1 "Frame-done" | grep -v Frame-done |grep -v -- -- > /tmp/index.txt
 
 #cat /tmp/index.txt
 cp /tmp/index.txt /tmp/index.find
