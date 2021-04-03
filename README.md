@@ -70,6 +70,8 @@ $# vi lilnasx
 Install exiv2
 https://www.justinsilver.com/random/fix-pkg-on-freenas-11-2/
 
+> pkg install -y exiv2
+
 ```
 lorrick@Lurch:/volume1/bin$ cat pic-process.sh
 BASEDIR=/tmp
