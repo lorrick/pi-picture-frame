@@ -105,11 +105,13 @@ https://www.truenas.com/community/threads/symlinks-not-followable-in-freenas-8-u
 1) Sevices->SMB->Edit(pencil icon)
 1) Open "Advanced Options"
 1) Add the following to the "Auxiliary Parameters" field
->
-> unix extensions = no
-> follow symlinks = yes
-> wide links = yes
->
+
+``` 
+ unix extensions = no
+ follow symlinks = yes
+ wide links = yes
+```
+
 1) Click Save
 
 
