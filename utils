@@ -1,0 +1,4 @@
+
+Find duplicate files:
+
+sudo docker run --rm -v $(pwd)/Pictures:/data/mov1 toru2220/fdupes fdupes -nArsH mov1 | grep -v \@ | uniq
